@@ -1,3 +1,9 @@
+// Queue digunakan untuk kasir sebagai fitur antrian pesanan
+// Linked list akan digunakan manager sebagai fitur penambahan menu, dan stok
+// Linked list insertAwal untuk menambahkan menu di awal
+// Linked list insertTengah untuk menambahkan menu di tengah
+// Linked list insertAkhir untuk menambahkan menu di akhir
+
 #include <iostream>
 #define max 100
 using namespace std;
@@ -7,10 +13,11 @@ string managerName, managerPass;
 
 struct Menu
 {
-	string namaCustomer;
-	string namaMakanan;
-	int harga;
-	int jumlah;
+	string namaCustomer; // Queue // Untuk menampilkan antrian atas nama ... dan untuk menyelesaikan pesanan pertama
+	string namaMakanan; // Linked List // Menambahkan menu makanan
+	int harga; // Linked List // Menambahkan harga makanan
+	int stok; // Linked List // Menambahkan stok makanan
+	int jumlah; // Queue
 }menu;
 
 struct queue
@@ -20,7 +27,82 @@ struct queue
 	int tail;
 }antrian;
 
-bool isEmpty()
+struct linkedList
+{
+	Menu menu;
+	linkedList *next;
+};
+
+linkedList* head = NULL;
+linkedList* tail = NULL;
+
+void insertAwal()
+{
+	linkedList *newNode = NULL;
+	newNode = new linkedList;
+	cout << "==== Tambah Menu ====" << endl;
+	cout << "Masukkan nama makanan : ";
+	cin >> newNode -> menu.namaMakanan;
+	cout << "Masukkan harga : ";
+	cin >> newNode -> menu.harga;
+	cout << "Masukkan stok : ";
+	cin >> newNode -> menu.stok;
+	cout << "Menu " << menu.namaMakanan << " berhasil ditambahkan" << endl;
+	if (head == NULL)
+	{
+		head = newNode;
+		tail = newNode;
+	}
+	else
+	{
+		newNode -> next = head;
+		head = newNode;
+	}
+}
+
+void insertAkhir()
+{
+	linkedList* newNode = NULL;
+	newNode = new linkedList;
+	cout << "Masukkan nama makanan : ";
+	cin >> newNode->menu.namaMakanan;
+	cout << "Masukkan harga : ";
+	cin >> newNode->menu.harga;
+	cout << "Masukkan stok : ";
+	cin >> newNode->menu.stok;
+	cout << "Menu " << menu.namaMakanan << " berhasil ditambahkan" << endl;
+	if (head == NULL)
+	{
+		head = newNode;
+		tail = newNode;
+	}
+	else
+	{
+		tail->next = newNode;
+		tail = newNode;
+	}
+}
+
+void tampilDataLinkedList()
+{
+	if (head == NULL)
+	{
+		cout << "Data kosong" << endl;
+	}
+	else
+	{
+		linkedList *bantu = head;
+		while (bantu != NULL)
+		{
+			cout << "Nama Makanan : " << bantu->menu.namaMakanan << endl;
+			cout << "Harga : " << bantu->menu.harga << endl;
+			cout << "Stok : " << bantu->menu.stok << endl;
+			bantu = bantu->next;
+		}
+	}
+}
+
+bool isEmpty() // Queue
 {
 	if (antrian.tail == 0)
 	{
@@ -32,7 +114,7 @@ bool isEmpty()
 	}
 }
 
-bool isFull()
+bool isFull() // Queue
 {
 	if (antrian.tail == max)
 	{
@@ -44,7 +126,7 @@ bool isFull()
 	}
 }
 
-void dequeue()
+void dequeue() // Queue
 {
 	if (!isEmpty())
 	{
@@ -53,84 +135,36 @@ void dequeue()
 	}
 }
 
-void enqueue()
+void enqueue() 
 {
+	int sizeArray = sizeof(antrian.menu) / sizeof(*antrian.menu);
 	if (!isFull())
 	{
-		Menu menu[5];
-		menu[0].namaMakanan = "Nasi Goreng";
-		menu[0].harga = 15000;
-		menu[1].namaMakanan = "Mie Goreng";
-		menu[1].harga = 12000;
-		menu[2].namaMakanan = "Ayam Goreng";
-		menu[2].harga = 10000;
-		menu[3].namaMakanan = "Ayam Bakar";
-		menu[3].harga = 15000;
-		menu[4].namaMakanan = "Es Teh";
-		menu[4].harga = 5000;
-
-	x:
-
-		int total = 0, banyak;
-
-
+		Menu menu[max];
+		linkedList* bantu = head;
 		cout << "=== Halaman Kasir ===" << endl;
 		cout << "Menu Makanan" << endl;
-		for (int i = 0; i < 5; i++)
+		while (bantu != NULL)
 		{
-			cout << "[" << i + 1 << "] " << menu[i].namaMakanan << " - Rp " << menu[i].harga << endl;
+			int i = 0;
+			cout << "[" << i + 1 << "] " << bantu->menu.namaMakanan << " - Rp " << bantu->menu.harga << endl;
+			bantu = bantu->next;
 		}
-		cout << "[6] Keluar" << endl;
-		cout << "Masukkan banyaknya jenis pesanan :";
-		cin >> banyak;
-		for (int i = 0; i < banyak; i++)
+		cout << "Ketik 0 jika ingin mengakhiri" << endl;
+		cout << "Masukkan pilihan : ";
+		cin >> pil;
+		if (pil <= sizeArray)
 		{
-			cout << "Pesanan ke - " << i + 1 << endl;
-			cout << "Masukkan nomor menu : ";
-			cin >> pil;
-			cout << "Jumlah makanan : ";
-			cin >> antrian.menu[antrian.tail].jumlah;
-			antrian.menu[antrian.tail].harga = menu[pil - 1].harga;
-			antrian.tail++;
-
-			for (int i = antrian.head; i <= antrian.tail; i++)
-			{
-				cout << "Pesanan ke - " << i + 1 << endl;
-				total = total + (antrian.menu[i].harga * antrian.menu[i].jumlah);
-				cout << antrian.menu[i].namaMakanan << " * " << antrian.menu[i].jumlah << " - Rp " << antrian.menu[i].harga << endl;
-			}
-			cout << "Total harga : Rp " << total << endl;
-			goto x;
-		
-
-			//if (pil == 6)
-			//{
-			//	cout << "Keluar" << endl;
-			//}
-			//else if (pil >= 1 && pil <= 5)
-			//{
-			//	antrian.menu[antrian.tail].namaMakanan = menu[pil - 1].namaMakanan;
-			//	antrian.menu[antrian.tail].harga = menu[pil - 1].harga;
-			//	cout << "Masukkan jumlah : ";
-			//	cin >> antrian.menu[antrian.tail].jumlah;
-			//	total = antrian.menu[antrian.tail].harga * antrian.menu[antrian.tail].jumlah;
-			//	cout << "Total harga : Rp " << total << endl;
-			//	antrian.tail++;
-			//	cout << "Pesanan atas nama " << antrian.menu[antrian.tail - 1].namaCustomer << " telah ditambahkan" << endl;
-			//	cout << "Apakah anda ingin menambahkan pesanan lagi? (y/n): ";
-			//	char pilihan;
-			//	cin >> pilihan;
-			//	if (pilihan == 'y' || pilihan == 'Y')
-			//	{
-			//		//Penambahan makanan
-			//	}
-			//	else
-			//	{
-			//		//halamanKasir();
-			//	}
-			//}
+			
 		}
-
+		else if (pil == 0)
+		{
+			cout << "Keluar" << endl;
+		}
+		else
+		{
+			cout << "Pilihan tidak tersedia" << endl;
+		}
 	}
 
 	else
@@ -156,9 +190,46 @@ void halamanKasir()
 	}
 	else if (pil == 2)
 	{
-		//dequeue();
+		dequeue();
 	}
 	else if (pil == 3)
+	{
+		cout << "Anda keluar" << endl;
+		exit(0);
+	}
+	else
+	{
+		cout << "Pilihan tidak tersedia" << endl;
+	}
+}
+
+void halamanManager()
+{
+	cout << "=== Halaman Manager ===" << endl;
+	cout << "[1] Tambahkan Menu Makanan" << endl;
+	cout << "[2] Lihat Menu" << endl;
+	cout << "[3] Tambahkan Stok" << endl;
+	cout << "[4] Lihat Stok" << endl;
+	cout << "[5] Keluar" << endl;
+	cout << "Masukkan pilihan : ";
+	cin >> pil;
+	if (pil == 1)
+	{
+		insertAwal();
+	}
+	else if (pil == 2)
+	{
+		tampilDataLinkedList();
+	}
+	else if (pil == 3)
+	{
+		// Tambahkan kode untuk menambahkan stok
+	}
+	else if (pil == 4)
+	{
+		// Tambahkan kode untuk melihat stok
+	}
+	else if (pil == 5)
 	{
 		cout << "Anda keluar" << endl;
 		exit(0);
@@ -191,6 +262,7 @@ int main()
 				cout << "Anda login sebagai manager" << endl;
 				// Tambahkan animasi loading dengan cout Loading...
 				// Tambahkan kode untuk menu manager
+				halamanManager();
 			}
 			else
 			{
