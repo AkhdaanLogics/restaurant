@@ -1,9 +1,3 @@
-// Queue digunakan untuk kasir sebagai fitur antrian pesanan
-// Linked list akan digunakan manager sebagai fitur penambahan menu, dan stok
-// Linked list insertAwal untuk menambahkan menu di awal
-// Linked list insertTengah untuk menambahkan menu di tengah
-// Linked list insertAkhir untuk menambahkan menu di akhir
-
 #include <iostream>
 #define max 100
 using namespace std;
@@ -264,7 +258,6 @@ void tambahStok()
 		cout << "Ubah stok : ";
 		int* stokBaru = &stokMakananArr[noMenu];
 		cin >> *stokBaru;
-		/*	stokMakananArr[pilMenu] += *stokBaru;*/
 		cout << "Stok berhasil ditambahkan" << endl;
 	}
 	else
@@ -282,7 +275,7 @@ void halamanManager()
 		cout << "[2] Ubah Stok" << endl; // Done
 		cout << "[3] Lihat Stok" << endl; // Done
 		cout << "[4] Cari Riwayat Pemesanan" << endl; // Done
-		cout << "[5] Pengeluaran Customer" << endl;
+		cout << "[5] Pengeluaran Customer" << endl; // Done
 		cout << "[6] Kembali" << endl;
 		cout << "Masukkan pilihan : ";
 		cin >> pil;
