@@ -36,6 +36,8 @@ struct RiwayatPesanan
 	int riwayatTotalHarga;
 }riwayat[max];
 
+int jmlRiwayat = 0;
+
 struct queue
 {
 	DataPesanan data[max];
@@ -319,13 +321,50 @@ void halamanManager()
 }
 
 void searchNama()
-{
-	cout << "Ini data pada queue" << endl;
-	cout << antrian.data[0].namaCustomer << endl;
-	cout << antrian.data[0].namaMakanan << endl;
-	cout << "Ini data pada riwayat" << endl;
-	cout << antrian.riwayat[0].riwayatNamaCustomer << endl;
-	cout << antrian.riwayat[0].riwayatNamaMakanan << endl;
+{	
+	string cariNama;
+	int ketemu, posisi[max];
+	int x = 0;
+	int k = 0;
+
+	if (riwayat == NULL)
+	{
+		cout << "Riwayat kosong" << endl;
+	}
+	else
+	{
+		cout << "Masukkan nama customer yang dicari : ";
+		cin >> cariNama;
+		while (antrian.riwayat[k].riwayatNamaCustomer == cariNama)
+		{
+			k++;
+			posisi[x] = k;
+			x++;
+		}
+		cout << endl;
+		if (x == 0)
+		{
+			cout << "Sistem tidak menemukan customer dengan nama " << cariNama << endl;
+		}
+		else
+		{
+			cout << "Sistem menemukan customer dengan nama " << cariNama << endl;
+			cout << cariNama << " telah memesan sebanyak " << x << " kali" << endl;
+			cout << "Berikut data pesanan yang telah dilakukan oleh " << cariNama << endl;
+			for (int i = 0; i < x; i++)
+			{
+				if (antrian.riwayat[i].riwayatNamaCustomer == cariNama)
+				{
+					cout << "Nama Customer : " << antrian.riwayat[posisi[i]].riwayatNamaCustomer << endl;
+					cout << "Nama Makanan : " << antrian.riwayat[posisi[i]].riwayatNamaMakanan << endl;
+					cout << "Jumlah Pesanan : " << antrian.riwayat[posisi[i]].riwayatJumlahPesanan << endl;
+					cout << "Harga : " << antrian.riwayat[posisi[i]].riwayatHarga << endl;
+					cout << "Total Harga : " << antrian.riwayat[posisi[i]].riwayatTotalHarga << endl;
+					cout << endl;
+				}
+			}
+		}
+	}
 }
 
 void masukAkun()
