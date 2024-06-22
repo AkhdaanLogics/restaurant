@@ -12,15 +12,20 @@ int pil;
 string managerName, managerPass;
 bool isAdmin;
 
-struct Menu
+// Data menu
+string namaMakananArr[] = { "Nasi Goreng", "Mie Goreng", "Ayam Goreng", "Ayam Bakar", "Ayam Kecap", "Ayam Rica", "Ayam Geprek", "Ayam Penyet" };
+int hargaMakananArr[] = { 15000, 12000, 20000, 25000, 25000, 25000, 20000, 20000 };
+int stokMakananArr[] = { 1, 5, 3, 6, 6, 7, 10, 10 };
+
+struct DataPesanan
 {
-	string namaCustomer; // Queue // Untuk menampilkan antrian atas nama ... dan untuk menyelesaikan pesanan pertama
-	string namaMakanan; // Menambahkan menu makanan
-	int harga; // Pointer // Mengubah harga makanan
+	string namaCustomer;
+	string namaMakanan;
+	int harga;
 	int totalHarga;
 	int jumlahPesanan;
-	int stok; // Pointer // Menambahkan stok makanan
-}menu[max];
+	int stok;
+}data[max];
 
 struct RiwayatPesanan
 {
@@ -33,12 +38,14 @@ struct RiwayatPesanan
 
 struct queue
 {
-	Menu menu[max];
+	DataPesanan data[max];
 	RiwayatPesanan riwayat[max];
 	int head;
 	int tail;
 }antrian;
 
+void searchNama();
+void masukAkun();
 void halamanAdmin();
 void halamanKasir();
 void halamanManager();
@@ -78,8 +85,13 @@ void dequeue() // Queue
 {
 	if (!isEmpty())
 	{
-		cout << "Pesanan atas nama " << antrian.menu[antrian.head].namaCustomer << " selesai" << endl;
+		cout << "Pesanan teratas selesai" << endl;
+
 		antrian.head++;
+		if (antrian.head == antrian.tail)
+		{
+			antrian.head = antrian.tail = 0;
+		}
 	}
 	else
 	{
@@ -87,17 +99,17 @@ void dequeue() // Queue
 	}
 }
 
-void tampilPesanan()
+void tampilAntrian()
 {
 	if (!isEmpty())
 	{
 		for (int i = antrian.head; i < antrian.tail; i++)
 		{
 			cout << "Pesanan ke - " << i + 1 << endl;
-			cout << "Nama Customer : " << antrian.menu[i].namaCustomer << endl;
-			cout << "Nama Makanan : " << antrian.menu[i].namaMakanan << endl;
-			cout << "Jumlah : " << antrian.menu[i].jumlahPesanan << endl;
-			cout << "Harga : " << antrian.menu[i].harga << endl;
+			cout << "Nama Customer : " << antrian.data[i].namaCustomer << endl;
+			cout << "Nama Makanan : " << antrian.data[i].namaMakanan << endl;
+			cout << "Jumlah : " << antrian.data[i].jumlahPesanan << endl;
+			cout << "Total Harga : " << antrian.data[i].totalHarga << endl;
 			cout << endl;
 		}
 	}
@@ -108,53 +120,20 @@ void tampilPesanan()
 
 }
 
-
 void tampilMenu()
 {
-	menu[0].namaMakanan = "Nasi Goreng";
-	menu[0].harga = 15000;
-	menu[0].stok = 1;
-
-	menu[1].namaMakanan = "Mie Goreng";
-	menu[1].harga = 12000;
-	menu[1].stok = 2;
-
-	menu[2].namaMakanan = "Ayam Goreng";
-	menu[2].harga = 20000;
-	menu[2].stok = 3;
-
-	menu[3].namaMakanan = "Ayam Bakar";
-	menu[3].harga = 25000;
-	menu[3].stok = 4;
-
-	menu[4].namaMakanan = "Ayam Geprek";
-	menu[4].harga = 18000;
-	menu[4].stok = 5;
-
-	menu[5].namaMakanan = "Es Teh";
-	menu[5].harga = 5000;
-	menu[5].stok = 6;
-
-	menu[6].namaMakanan = "Es Jeruk";
-	menu[6].harga = 6000;
-	menu[6].stok = 7;
-
-	menu[7].namaMakanan = "Es Campur";
-	menu[7].harga = 10000;
-	menu[7].stok = 8;
-
 	for (int i = 0; i < 8; i++)
 	{
 		cout << "Menu ke - " << i + 1 << endl;
-		cout << "Nama Makanan : " << menu[i].namaMakanan << endl;
-		cout << "Harga : " << menu[i].harga << endl;
-		if (menu[i].stok == 0)
+		cout << "Nama Makanan : " << namaMakananArr[i] << endl;
+		cout << "Harga : " << hargaMakananArr[i] << endl;
+		if (stokMakananArr[i] == 0)
 		{
 			cout << "Stok : Habis" << endl;
 		}
 		else
 		{
-			cout << "Stok : " << menu[i].stok << endl;
+			cout << "Stok : " << stokMakananArr[i] << endl;
 		}
 		cout << endl;
 	}
@@ -166,138 +145,59 @@ int noMenu;
 
 void enqueue()
 {
-	//if (!isFull()) 
-	//{
-	//	cout << "Masukkan nama customer : ";
-	//	cin >> antrian.menu[antrian.tail].namaCustomer;
-	//	antrian.riwayat[antrian.tail].riwayatNamaCustomer = antrian.menu[antrian.tail].namaCustomer;
-	//	char pilihan;
-	//	do 
-	//	{
-	//		tampilMenu();
-	//		cout << "Masukkan nomor menu : ";
-	//		cin >> pilMenu;
-	//		pilMenu--;
-
-	//		if (pilMenu >= 0 && pilMenu < 8) 
-	//		{
-	//			if (menu[pilMenu].stok == 0) 
-	//			{
-	//				cout << "Stok habis" << endl;
-	//			}
-	//			else 
-	//			{
-	//				cout << "Nama Makanan : " << menu[pilMenu].namaMakanan << endl;
-
-	//				cout << "Jumlah pesanan : ";
-	//				cin >> menu[pilMenu].jumlahPesanan;
-	//				antrian.menu[antrian.tail].jumlahPesanan = menu[pilMenu].jumlahPesanan;
-	//				antrian.riwayat[antrian.tail].riwayatJumlahPesanan = menu[pilMenu].jumlahPesanan;
-
-	//				if (menu[pilMenu].jumlahPesanan > menu[pilMenu].stok)
-	//				{
-	//					cout << "Stok tidak mencukupi" << endl;
-	//				}
-	//				else 
-	//				{
-	//					menu[pilMenu].totalHarga = menu[pilMenu].harga * menu[pilMenu].jumlahPesanan;
-	//					antrian.riwayat[antrian.tail].riwayatHarga = menu[pilMenu].harga;
-
-	//					cout << "Total harga : " << menu[pilMenu].totalHarga << endl;
-	//					cout << "Pesanan berhasil ditambahkan" << endl;
-
-	//					antrian.menu[antrian.tail].namaMakanan = menu[pilMenu].namaMakanan;
-	//					antrian.riwayat[antrian.tail].riwayatNamaMakanan = menu[pilMenu].namaMakanan;
-
-	//					antrian.menu[antrian.tail].harga = menu[pilMenu].harga;
-	//					antrian.riwayat[antrian.tail].riwayatHarga = menu[pilMenu].harga;
-
-	//					// BUG : Stok tidak berkurang saat memasukkan menu yang sama
-	//					antrian.menu[antrian.tail].stok = menu[pilMenu].stok - menu[pilMenu].jumlahPesanan;
-	//					menu[pilMenu].stok -= menu[pilMenu].jumlahPesanan;
-
-	//					antrian.tail++;
-	//					cout << "Apakah ingin menambahkan pesanan lagi? (y/n) : ";
-	//					cin >> pilihan;
-	//				}
-	//			}
-	//		}
-	//		else 
-	//		{
-	//			cout << "Menu tidak tersedia" << endl;
-	//			pilihan = 'y';
-	//		}
-	//	} while (pilihan == 'y');
-
-	//	cout << "Terimakasih sudah memesan" << endl;
-	//	halamanKasir();
-	//}
-	//else 
-	//{
-	//	cout << "Antrian penuh, mohon menunggu beberapa saat!" << endl;
-	//}
-
-	// Perbaikan dari chat gpt
 	if (!isFull())
 	{
 		cout << "Masukkan nama customer : ";
-		cin >> antrian.menu[antrian.tail].namaCustomer;
-		antrian.riwayat[antrian.tail].riwayatNamaCustomer = antrian.menu[antrian.tail].namaCustomer;
+		cin >> antrian.data[antrian.tail].namaCustomer;
+		antrian.riwayat[antrian.tail].riwayatNamaCustomer = antrian.data[antrian.tail].namaCustomer;
+
 		char pilihan;
 		do
 		{
 			tampilMenu();
 			cout << "Masukkan nomor menu : ";
-			cin >> pilMenu;
-			pilMenu--;
-
-			if (pilMenu >= 0 && pilMenu < 8)
+			cin >> noMenu;
+			noMenu--;
+			if (noMenu >= 0 && noMenu < 8)
 			{
-				if (menu[pilMenu].stok == 0)
+				if (stokMakananArr[noMenu] == 0)
 				{
 					cout << "Stok habis" << endl;
 				}
 				else
 				{
-					cout << "Nama Makanan : " << menu[pilMenu].namaMakanan << endl;
-
+					cout << "Nama Makanan : " << namaMakananArr[noMenu] << endl;
 					cout << "Jumlah pesanan : ";
-					cin >> menu[pilMenu].jumlahPesanan;
-					antrian.menu[antrian.tail].jumlahPesanan = menu[pilMenu].jumlahPesanan;
-					antrian.riwayat[antrian.tail].riwayatJumlahPesanan = menu[pilMenu].jumlahPesanan;
+					cin >> antrian.data[antrian.tail].jumlahPesanan;
+					antrian.riwayat[antrian.tail].riwayatJumlahPesanan = antrian.data[antrian.tail].jumlahPesanan; // Copy jumlah pesanan ke riwayat
 
-					if (menu[pilMenu].jumlahPesanan > menu[pilMenu].stok)
+					if (antrian.data[antrian.tail].jumlahPesanan > stokMakananArr[noMenu])
 					{
 						cout << "Stok tidak mencukupi" << endl;
+						enqueue();
 					}
 					else
 					{
-						// Simpan informasi pesanan di antrian
-						antrian.menu[antrian.tail].namaMakanan = menu[pilMenu].namaMakanan;
-						antrian.riwayat[antrian.tail].riwayatNamaMakanan = menu[pilMenu].namaMakanan;
-						antrian.menu[antrian.tail].harga = menu[pilMenu].harga;
-						antrian.riwayat[antrian.tail].riwayatHarga = menu[pilMenu].harga;
+						antrian.data[antrian.tail].totalHarga = hargaMakananArr[noMenu] * antrian.data[antrian.tail].jumlahPesanan; // Hitung total harga
+						antrian.riwayat[antrian.tail].riwayatHarga = hargaMakananArr[noMenu]; // Copy harga makanan ke riwayat
+						cout << "Total harga : " << antrian.data[antrian.tail].totalHarga << endl; // Tampilkan total harga
+						cout << "Pesanan berhasil ditambahkan" << endl;
 
-						// Hitung total harga pesanan
-						menu[pilMenu].totalHarga = menu[pilMenu].harga * menu[pilMenu].jumlahPesanan;
-						antrian.menu[antrian.tail].totalHarga = menu[pilMenu].totalHarga;
-						antrian.riwayat[antrian.tail].riwayatTotalHarga = menu[pilMenu].totalHarga;
-
-						// Kurangi stok di menu
-						menu[pilMenu].stok -= menu[pilMenu].jumlahPesanan;
-						antrian.menu[antrian.tail].stok = menu[pilMenu].stok;
+						// Copy data ke struktur antrian
+						antrian.data[antrian.tail].namaMakanan = namaMakananArr[noMenu]; // Copy nama makanan
+						antrian.riwayat[antrian.tail].riwayatNamaMakanan = namaMakananArr[noMenu]; // Copy nama makanan ke riwayat
+						antrian.data[antrian.tail].harga = hargaMakananArr[noMenu]; // Copy harga makanan
+						antrian.riwayat[antrian.tail].riwayatHarga = hargaMakananArr[noMenu]; // Copy harga makanan ke riwayat
+						stokSisa = stokMakananArr[noMenu] - antrian.data[antrian.tail].jumlahPesanan; // Hitung sisa stok
+						antrian.data[antrian.tail].stok = stokSisa; // Copy sisa stok
+						stokMakananArr[noMenu] -= antrian.data[antrian.tail].jumlahPesanan; // Kurangi stok
 
 						antrian.tail++;
-						cout << "Pesanan berhasil ditambahkan" << endl;
+
 						cout << "Apakah ingin menambahkan pesanan lagi? (y/n) : ";
 						cin >> pilihan;
 					}
 				}
-			}
-			else
-			{
-				cout << "Menu tidak tersedia" << endl;
-				pilihan = 'y';
 			}
 		} while (pilihan == 'y');
 
@@ -310,45 +210,61 @@ void enqueue()
 	}
 }
 
-
-
 void halamanKasir()
 {
-	cout << "=== Halaman Kasir ===" << endl;
-	cout << "[1] Tambah antrian" << endl;
-	cout << "[2] Lihat antrian" << endl;
-	cout << "[2] Pesanan selesai" << endl;
-	cout << "[3] Keluar" << endl;
-	cout << "Masukkan pilihan: ";
-	cin >> pil;
-	if (pil == 1)
+	do
 	{
-		enqueue();
-	}
-	else if (pil == 2)
+		cout << "=== Halaman Kasir ===" << endl;
+		cout << "[1] Tambah antrian" << endl; // Done
+		cout << "[2] Tampilkan antrian" << endl; // Done
+		cout << "[3] Selesaikan pesanan teratas" << endl; // Done
+		cout << "[4] Kembali" << endl; // Done
+		cout << "Masukkan pilihan: ";
+		cin >> pil;
+		if (pil == 1)
+		{
+			enqueue();
+		}
+		else if (pil == 2)
+		{
+			tampilAntrian();
+		}
+		else if (pil == 3)
+		{
+			dequeue();
+		}
+		else if (pil == 4)
+		{
+			cout << "Anda keluar" << endl;
+			masukAkun();
+		}
+		else
+		{
+			cout << "Pilihan tidak tersedia" << endl;
+		}
+	} while (pil != 4);
+}
+
+void tambahStok()
+{
+	cout << "=== Ubah Stok ===" << endl;
+	cout << "Masukkan nomor menu : ";
+	cin >> noMenu;
+	noMenu--;
+	if (noMenu >= 0 && noMenu < 8)
 	{
-		tampilPesanan();
-	}
-	else if (pil == 3)
-	{
-		dequeue();
-	}
-	else if (pil == 4)
-	{
-		cout << "Anda keluar" << endl;
-		exit(0);
+		cout << "Nama Makanan : " << namaMakananArr[noMenu] << endl;
+		cout << "Stok sekarang : " << stokMakananArr[noMenu] << endl;
+		cout << "Ubah stok : ";
+		int* stokBaru = &stokMakananArr[noMenu];
+		cin >> *stokBaru;
+		/*	stokMakananArr[pilMenu] += *stokBaru;*/
+		cout << "Stok berhasil ditambahkan" << endl;
 	}
 	else
 	{
-		cout << "Pilihan tidak tersedia" << endl;
+		cout << "Menu tidak tersedia" << endl;
 	}
-}
-
-void tambahStok(Menu* menu, int posisi, int tambah)
-{
-	menu[posisi].stok += tambah;
-	tampilMenu();
-	cout << "Stok berhasil ditambahkan" << endl;
 }
 
 void halamanManager()
@@ -356,12 +272,12 @@ void halamanManager()
 	do
 	{
 		cout << "=== Halaman Manager ===" << endl;
-		cout << "[1] Lihat Menu" << endl;
-		cout << "[2] Tambahkan Stok" << endl;
-		cout << "[3] Lihat Stok" << endl;
+		cout << "[1] Lihat Menu" << endl; // Done
+		cout << "[2] Ubah Stok" << endl; // Done
+		cout << "[3] Lihat Stok" << endl; // Done
 		cout << "[4] Cari Riwayat Pemesanan" << endl;
 		cout << "[5] Laporan Keuangan" << endl;
-		cout << "[6] Keluar" << endl;
+		cout << "[6] Kembali" << endl;
 		cout << "Masukkan pilihan : ";
 		cin >> pil;
 		if (pil == 1)
@@ -370,26 +286,21 @@ void halamanManager()
 		}
 		else if (pil == 2)
 		{
-			cout << "Masukkan nomor menu : ";
-			cin >> noMenu;
-			noMenu--;
-			cout << "Tambahkan stok : ";
-			cin >> stokSisa;
-			tambahStok(menu, noMenu, stokSisa);
+			tambahStok();
 		}
 		else if (pil == 3)
 		{
 			for (int i = 0; i < 8; i++)
 			{
 				cout << "Menu ke - " << i + 1 << endl;
-				cout << "Nama Makanan : " << menu[i].namaMakanan << endl;
-				cout << "Stok : " << menu[i].stok << endl;
+				cout << "Nama Makanan : " << namaMakananArr[i] << endl;
+				cout << "Stok : " << stokMakananArr[i] << endl;
 				cout << endl;
 			}
 		}
 		else if (pil == 4)
 		{
-			//searchNama();
+			searchNama();
 		}
 		else if (pil == 5)
 		{
@@ -398,7 +309,7 @@ void halamanManager()
 		else if (pil == 6)
 		{
 			cout << "Anda keluar" << endl;
-			exit(0);
+			masukAkun();
 		}
 		else
 		{
@@ -409,62 +320,65 @@ void halamanManager()
 
 void searchNama()
 {
-	if (!isEmpty())
-	{
+	cout << "Ini data pada queue" << endl;
+	cout << antrian.data[0].namaCustomer << endl;
+	cout << antrian.data[0].namaMakanan << endl;
+	cout << "Ini data pada riwayat" << endl;
+	cout << antrian.riwayat[0].riwayatNamaCustomer << endl;
+	cout << antrian.riwayat[0].riwayatNamaMakanan << endl;
+}
 
+void masukAkun()
+{
+	cout << "=== Halaman Login ===" << endl;
+	cout << "[1] Login sebagai manager" << endl;
+	cout << "[2] Login sebagai kasir" << endl;
+	cout << "[3] Keluar" << endl;
+	cout << "Masukkan pilihan: ";
+	cin >> pil;
+	if (pil == 1)
+	{
+		cout << "=== Login as Manager ====" << endl;
+		cout << "[*] Masukkan username : ";
+		cin >> managerName;
+		cout << "[*] Masukkan password : ";
+		cin >> managerPass;
+		if (managerName == "admin" && managerPass == "admin")
+		{
+			cout << "Anda login sebagai manager" << endl;
+			// Tambahkan animasi loading dengan cout Loading...
+			// Tambahkan kode untuk menu manager
+			halamanManager();
+		}
+		else
+		{
+			cout << "Username atau password salah" << endl;
+			// Tambahan kode untuk mengulang login
+		}
+	}
+	else if (pil == 2)
+	{
+		cout << "Anda login sebagai kasir" << endl;
+		halamanKasir();
+		// Tambahkan animasi loading dengan cout Loading...
+		// Tambahkan kode untuk menu kasir
+	}
+	else if (pil == 3)
+	{
+		cout << "Anda keluar" << endl;
+		// Tambahkan animasi loading dengan cout Keluar...
+		exit(0);
 	}
 	else
 	{
-		cout << "Antrian kosong!" << endl;
+		cout << "Pilihan tidak tersedia" << endl;
 	}
 }
 
 int main()
 {
-	do
+	while (true)
 	{
-		cout << "=== Halaman Login ===" << endl;
-		cout << "[1] Login sebagai manager" << endl;
-		cout << "[2] Login sebagai kasir" << endl;
-		cout << "[3] Keluar" << endl;
-		cout << "Masukkan pilihan: ";
-		cin >> pil;
-		if (pil == 1)
-		{
-			cout << "=== Login as Manager ====" << endl;
-			cout << "[*] Masukkan username : ";
-			cin >> managerName;
-			cout << "[*] Masukkan password : ";
-			cin >> managerPass;
-			if (managerName == "admin" && managerPass == "admin")
-			{
-				cout << "Anda login sebagai manager" << endl;
-				// Tambahkan animasi loading dengan cout Loading...
-				// Tambahkan kode untuk menu manager
-				halamanManager();
-			}
-			else
-			{
-				cout << "Username atau password salah" << endl;
-				// Tambahan kode untuk mengulang login
-			}
-		}
-		else if (pil == 2)
-		{
-			cout << "Anda login sebagai kasir" << endl;
-			halamanKasir();
-			// Tambahkan animasi loading dengan cout Loading...
-			// Tambahkan kode untuk menu kasir
-		}
-		else if (pil == 3)
-		{
-			cout << "Anda keluar" << endl;
-			// Tambahkan animasi loading dengan cout Keluar...
-			exit(0);
-		}
-		else
-		{
-			cout << "Pilihan tidak tersedia" << endl;
-		}
-	} while (pil != 3);
+		masukAkun();
+	}
 }
