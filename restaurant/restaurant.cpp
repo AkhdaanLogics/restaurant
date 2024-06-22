@@ -193,8 +193,10 @@ void enqueue()
 						stokSisa = stokMakananArr[noMenu] - antrian.data[antrian.tail].jumlahPesanan; // Hitung sisa stok
 						antrian.data[antrian.tail].stok = stokSisa; // Copy sisa stok
 						stokMakananArr[noMenu] -= antrian.data[antrian.tail].jumlahPesanan; // Kurangi stok
+						antrian.riwayat[antrian.tail].riwayatTotalHarga = antrian.data[antrian.tail].totalHarga; // Copy total harga ke riwayat
 
 						antrian.tail++;
+						jmlRiwayat++;
 
 						cout << "Apakah ingin menambahkan pesanan lagi? (y/n) : ";
 						cin >> pilihan;
@@ -277,7 +279,7 @@ void halamanManager()
 		cout << "[1] Lihat Menu" << endl; // Done
 		cout << "[2] Ubah Stok" << endl; // Done
 		cout << "[3] Lihat Stok" << endl; // Done
-		cout << "[4] Cari Riwayat Pemesanan" << endl;
+		cout << "[4] Cari Riwayat Pemesanan" << endl; // Done
 		cout << "[5] Laporan Keuangan" << endl;
 		cout << "[6] Kembali" << endl;
 		cout << "Masukkan pilihan : ";
@@ -320,14 +322,19 @@ void halamanManager()
 	} while (pil != 6);
 }
 
+void sortPengeluaranCustomer()
+{
+
+}
+
 void searchNama()
-{	
+{
 	string cariNama;
-	int ketemu, posisi[max];
+	int posisi[max];
 	int x = 0;
 	int k = 0;
 
-	if (riwayat == NULL)
+	if (jmlRiwayat == 0)
 	{
 		cout << "Riwayat kosong" << endl;
 	}
@@ -335,11 +342,13 @@ void searchNama()
 	{
 		cout << "Masukkan nama customer yang dicari : ";
 		cin >> cariNama;
-		while (antrian.riwayat[k].riwayatNamaCustomer == cariNama)
+		for (int i = 0; i < jmlRiwayat; i++)
 		{
-			k++;
-			posisi[x] = k;
-			x++;
+			if (antrian.riwayat[i].riwayatNamaCustomer == cariNama)
+			{
+				posisi[x] = i;
+				x++;
+			}
 		}
 		cout << endl;
 		if (x == 0)
@@ -349,19 +358,15 @@ void searchNama()
 		else
 		{
 			cout << "Sistem menemukan customer dengan nama " << cariNama << endl;
-			cout << cariNama << " telah memesan sebanyak " << x << " kali" << endl;
 			cout << "Berikut data pesanan yang telah dilakukan oleh " << cariNama << endl;
 			for (int i = 0; i < x; i++)
 			{
-				if (antrian.riwayat[i].riwayatNamaCustomer == cariNama)
-				{
-					cout << "Nama Customer : " << antrian.riwayat[posisi[i]].riwayatNamaCustomer << endl;
-					cout << "Nama Makanan : " << antrian.riwayat[posisi[i]].riwayatNamaMakanan << endl;
-					cout << "Jumlah Pesanan : " << antrian.riwayat[posisi[i]].riwayatJumlahPesanan << endl;
-					cout << "Harga : " << antrian.riwayat[posisi[i]].riwayatHarga << endl;
-					cout << "Total Harga : " << antrian.riwayat[posisi[i]].riwayatTotalHarga << endl;
-					cout << endl;
-				}
+				cout << "Nama Customer : " << antrian.riwayat[posisi[i]].riwayatNamaCustomer << endl;
+				cout << "Nama Makanan : " << antrian.riwayat[posisi[i]].riwayatNamaMakanan << endl;
+				cout << "Jumlah Pesanan : " << antrian.riwayat[posisi[i]].riwayatJumlahPesanan << endl;
+				cout << "Harga : " << antrian.riwayat[posisi[i]].riwayatHarga << endl;
+				cout << "Total Harga : " << antrian.riwayat[posisi[i]].riwayatTotalHarga << endl;
+				cout << endl;
 			}
 		}
 	}
