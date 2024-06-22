@@ -178,7 +178,7 @@ void enqueue()
 					if (antrian.data[antrian.tail].jumlahPesanan > stokMakananArr[noMenu])
 					{
 						cout << "Stok tidak mencukupi" << endl;
-						enqueue();
+						pilihan = 'y';
 					}
 					else
 					{
@@ -362,7 +362,7 @@ void sortPengeluaranCustomer()
 		}
 	}
 
-		// Sorting dari yang terkecil
+	// Sorting dari yang terkecil
 	else if (pil == 2)
 	{
 		// Sorting dari yang terkecil menggunakan Bubble Sort
