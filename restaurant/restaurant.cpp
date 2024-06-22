@@ -46,6 +46,8 @@ struct queue
 	int tail;
 }antrian;
 
+
+void sortPengeluaranCustomer();
 void searchNama();
 void masukAkun();
 void halamanAdmin();
@@ -280,7 +282,7 @@ void halamanManager()
 		cout << "[2] Ubah Stok" << endl; // Done
 		cout << "[3] Lihat Stok" << endl; // Done
 		cout << "[4] Cari Riwayat Pemesanan" << endl; // Done
-		cout << "[5] Laporan Keuangan" << endl;
+		cout << "[5] Pengeluaran Customer" << endl;
 		cout << "[6] Kembali" << endl;
 		cout << "Masukkan pilihan : ";
 		cin >> pil;
@@ -308,7 +310,7 @@ void halamanManager()
 		}
 		else if (pil == 5)
 		{
-			cout << "Laporan Keuangan" << endl;
+			sortPengeluaranCustomer();
 		}
 		else if (pil == 6)
 		{
@@ -324,7 +326,73 @@ void halamanManager()
 
 void sortPengeluaranCustomer()
 {
+	cout << "=== Urutkan Pengeluaran Customer ===" << endl;
+	cout << "[1] Urutkan dari yang terbesar" << endl;
+	cout << "[2] Urutkan dari yang terkecil" << endl;
+	cout << "Masukkan pilihan : ";
+	cin >> pil;
+	if (pil == 1)
+	{
+		// Sorting dari yang terbesar
+		if (pil == 1)
+		{
+			// Sorting dari yang terbesar menggunakan Bubble Sort
+			for (int i = 0; i < jmlRiwayat - 1; i++)
+			{
+				for (int j = 0; j < jmlRiwayat - i - 1; j++)
+				{
+					if (antrian.riwayat[j].riwayatTotalHarga < antrian.riwayat[j + 1].riwayatTotalHarga)
+					{
+						RiwayatPesanan temp = antrian.riwayat[j];
+						antrian.riwayat[j] = antrian.riwayat[j + 1];
+						antrian.riwayat[j + 1] = temp;
+					}
+				}
+			}
+			cout << "Pengeluaran customer dari yang terbesar" << endl;
+			for (int i = 0; i < jmlRiwayat; i++)
+			{
+				cout << "Nama Customer : " << antrian.riwayat[i].riwayatNamaCustomer << endl;
+				cout << "Nama Makanan : " << antrian.riwayat[i].riwayatNamaMakanan << endl;
+				cout << "Jumlah Pesanan : " << antrian.riwayat[i].riwayatJumlahPesanan << endl;
+				cout << "Harga : " << antrian.riwayat[i].riwayatHarga << endl;
+				cout << "Total Harga : " << antrian.riwayat[i].riwayatTotalHarga << endl;
+				cout << endl;
+			}
+		}
+	}
 
+		// Sorting dari yang terkecil
+	else if (pil == 2)
+	{
+		// Sorting dari yang terkecil menggunakan Bubble Sort
+		for (int i = 0; i < jmlRiwayat - 1; i++)
+		{
+			for (int j = 0; j < jmlRiwayat - i - 1; j++)
+			{
+				if (antrian.riwayat[j].riwayatTotalHarga > antrian.riwayat[j + 1].riwayatTotalHarga)
+				{
+					RiwayatPesanan temp = antrian.riwayat[j];
+					antrian.riwayat[j] = antrian.riwayat[j + 1];
+					antrian.riwayat[j + 1] = temp;
+				}
+			}
+		}
+		cout << "Pengeluaran customer dari yang terkecil" << endl;
+		for (int i = 0; i < jmlRiwayat; i++)
+		{
+			cout << "Nama Customer : " << antrian.riwayat[i].riwayatNamaCustomer << endl;
+			cout << "Nama Makanan : " << antrian.riwayat[i].riwayatNamaMakanan << endl;
+			cout << "Jumlah Pesanan : " << antrian.riwayat[i].riwayatJumlahPesanan << endl;
+			cout << "Harga : " << antrian.riwayat[i].riwayatHarga << endl;
+			cout << "Total Harga : " << antrian.riwayat[i].riwayatTotalHarga << endl;
+			cout << endl;
+		}
+	}
+	else
+	{
+		cout << "Pilihan tidak tersedia" << endl;
+	}
 }
 
 void searchNama()
