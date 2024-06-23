@@ -4,9 +4,8 @@ using namespace std;
 
 int pil;
 string managerName, managerPass;
-bool isAdmin;
 
-// Data menu
+// Data menu makanan
 string namaMakananArr[] = { "Nasi Goreng", "Mie Goreng", "Ayam Goreng", "Ayam Bakar", "Ayam Kecap", "Ayam Rica", "Ayam Geprek", "Ayam Penyet" };
 int hargaMakananArr[] = { 15000, 12000, 20000, 25000, 25000, 25000, 20000, 20000 };
 int stokMakananArr[] = { 1, 5, 3, 6, 6, 7, 10, 10 };
@@ -159,7 +158,7 @@ void enqueue()
 				tampilMenu();
 				cout << "Masukkan nomor menu : ";
 				cin >> noMenu;
-				noMenu--;
+				noMenu--; // Kurangi 1 karena array dimulai dari 0
 				if (noMenu >= 0 && noMenu < 8)
 				{
 					if (stokMakananArr[noMenu] == 0)
@@ -177,7 +176,7 @@ void enqueue()
 						stokHabis = true;
 					}
 				}
-			} while (!stokHabis && pilihan == 'y');
+			} while (!stokHabis);
 
 			cout << "Nama Makanan : " << namaMakananArr[noMenu] << endl;
 			cout << "Jumlah pesanan : ";
@@ -204,25 +203,14 @@ void enqueue()
 				antrian.data[antrian.tail].stok = stokSisa; // Copy sisa stok
 				stokMakananArr[noMenu] -= antrian.data[antrian.tail].jumlahPesanan; // Kurangi stok
 
-				antrian.riwayat[jmlRiwayat].riwayatNamaCustomer = tempNamaCustomer;
-				antrian.riwayat[jmlRiwayat].riwayatNamaMakanan = namaMakananArr[noMenu];
-				antrian.riwayat[jmlRiwayat].riwayatJumlahPesanan = antrian.data[antrian.tail].jumlahPesanan;
-				antrian.riwayat[jmlRiwayat].riwayatHarga = hargaMakananArr[noMenu];
-				antrian.riwayat[jmlRiwayat].riwayatTotalHarga = antrian.data[antrian.tail].totalHarga;
+				// Copy data ke struktur riwayat
+				antrian.riwayat[jmlRiwayat].riwayatNamaCustomer = tempNamaCustomer; // Copy nama customer ke riwayat
+				antrian.riwayat[jmlRiwayat].riwayatNamaMakanan = namaMakananArr[noMenu]; // Copy nama makanan ke riwayat
+				antrian.riwayat[jmlRiwayat].riwayatJumlahPesanan = antrian.data[antrian.tail].jumlahPesanan; // Copy jumlah pesanan ke riwayat
+				antrian.riwayat[jmlRiwayat].riwayatHarga = hargaMakananArr[noMenu]; // Copy harga makanan ke riwayat
+				antrian.riwayat[jmlRiwayat].riwayatTotalHarga = antrian.data[antrian.tail].totalHarga; // Copy total harga ke riwayat
 
-				// Copy data ke struktur antrian
-				//antrian.data[antrian.tail].namaMakanan = namaMakananArr[noMenu]; // Copy nama makanan
-				//antrian.riwayat[antrian.tail].riwayatNamaMakanan = namaMakananArr[noMenu]; // Copy nama makanan ke riwayat
-
-				//antrian.data[antrian.tail].harga = hargaMakananArr[noMenu]; // Copy harga makanan
-				//antrian.riwayat[antrian.tail].riwayatHarga = hargaMakananArr[noMenu]; // Copy harga makanan ke riwayat
-
-				//stokSisa = stokMakananArr[noMenu] - antrian.data[antrian.tail].jumlahPesanan; // Hitung sisa stok
-				//antrian.data[antrian.tail].stok = stokSisa; // Copy sisa stok
-
-				//stokMakananArr[noMenu] -= antrian.data[antrian.tail].jumlahPesanan; // Kurangi stok
-				//antrian.riwayat[antrian.tail].riwayatTotalHarga = antrian.data[antrian.tail].totalHarga; // Copy total harga ke riwayat
-
+				// Tambahkan index antrian
 				antrian.tail++;
 				jmlRiwayat++;
 
@@ -238,10 +226,10 @@ void halamanKasir()
 	do
 	{
 		cout << "=== Halaman Kasir ===" << endl;
-		cout << "[1] Tambah antrian" << endl; // Done
-		cout << "[2] Tampilkan antrian" << endl; // Done
-		cout << "[3] Selesaikan pesanan teratas" << endl; // Done
-		cout << "[4] Kembali" << endl; // Done
+		cout << "[1] Tambah antrian" << endl;
+		cout << "[2] Tampilkan antrian" << endl;
+		cout << "[3] Selesaikan pesanan teratas" << endl;
+		cout << "[4] Kembali" << endl;
 		cout << "Masukkan pilihan: ";
 		cin >> pil;
 		if (pil == 1)
@@ -273,7 +261,7 @@ void tambahStok()
 	cout << "=== Ubah Stok ===" << endl;
 	cout << "Masukkan nomor menu : ";
 	cin >> noMenu;
-	noMenu--;
+	noMenu--; // Kurangi 1 karena array dimulai dari 0
 	if (noMenu >= 0 && noMenu < 8)
 	{
 		cout << "Nama Makanan : " << namaMakananArr[noMenu] << endl;
@@ -281,7 +269,7 @@ void tambahStok()
 		cout << "Ubah stok : ";
 		int* stokBaru = &stokMakananArr[noMenu];
 		cin >> *stokBaru;
-		cout << "Stok berhasil ditambahkan" << endl;
+		cout << "Stok berhasil diubah" << endl;
 	}
 	else
 	{
@@ -294,11 +282,11 @@ void halamanManager()
 	do
 	{
 		cout << "=== Halaman Manager ===" << endl;
-		cout << "[1] Lihat Menu" << endl; // Done
-		cout << "[2] Ubah Stok" << endl; // Done
-		cout << "[3] Lihat Stok" << endl; // Done
-		cout << "[4] Cari Riwayat Pemesanan" << endl; // Done
-		cout << "[5] Pengeluaran Customer" << endl; // Done
+		cout << "[1] Lihat Menu" << endl;
+		cout << "[2] Ubah Stok" << endl;
+		cout << "[3] Lihat Stok" << endl;
+		cout << "[4] Cari Riwayat Pemesanan" << endl;
+		cout << "[5] Pengeluaran Customer" << endl;
 		cout << "[6] Kembali" << endl;
 		cout << "Masukkan pilihan : ";
 		cin >> pil;
@@ -308,6 +296,7 @@ void halamanManager()
 		}
 		else if (pil == 2)
 		{
+			tampilMenu();
 			tambahStok();
 		}
 		else if (pil == 3)
@@ -330,7 +319,7 @@ void halamanManager()
 		}
 		else if (pil == 6)
 		{
-			cout << "Anda keluar" << endl;
+			cout << "Kembali ke halaman sebelumnya" << endl;
 			masukAkun();
 		}
 		else
@@ -359,6 +348,7 @@ void sortPengeluaranCustomer()
 				{
 					if (antrian.riwayat[j].riwayatTotalHarga < antrian.riwayat[j + 1].riwayatTotalHarga)
 					{
+						// Tukar posisi
 						RiwayatPesanan temp = antrian.riwayat[j];
 						antrian.riwayat[j] = antrian.riwayat[j + 1];
 						antrian.riwayat[j + 1] = temp;
@@ -388,6 +378,7 @@ void sortPengeluaranCustomer()
 			{
 				if (antrian.riwayat[j].riwayatTotalHarga > antrian.riwayat[j + 1].riwayatTotalHarga)
 				{
+					// Tukar posisi
 					RiwayatPesanan temp = antrian.riwayat[j];
 					antrian.riwayat[j] = antrian.riwayat[j + 1];
 					antrian.riwayat[j + 1] = temp;
@@ -413,10 +404,9 @@ void sortPengeluaranCustomer()
 
 void searchNama()
 {
-	string cariNama;
-	int posisi[max];
-	int x = 0;
-	int k = 0;
+	string cariNama; // Nama yang dicari
+	int posisi[max]; // Menyimpan posisi data yang ditemukan
+	int x = 0; // Menyimpan jumlah data yang ditemukan
 
 	if (jmlRiwayat == 0)
 	{
@@ -430,6 +420,7 @@ void searchNama()
 		{
 			if (antrian.riwayat[i].riwayatNamaCustomer == cariNama)
 			{
+				// Simpan posisi data yang ditemukan
 				posisi[x] = i;
 				x++;
 			}
