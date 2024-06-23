@@ -201,8 +201,9 @@ void enqueue()
 			cout << "---------------------------" << endl;
 			cout << "Nama Makanan   : " << namaMakananArr[noMenu] << endl;
 			cout << "Jumlah pesanan : ";
-			cout << "---------------------------" << endl;
 			cin >> antrian.data[antrian.tail].jumlahPesanan;
+			cout << "---------------------------" << endl;
+			
 			antrian.riwayat[antrian.tail].riwayatJumlahPesanan = antrian.data[antrian.tail].jumlahPesanan; // Copy jumlah pesanan ke riwayat
 
 			if (antrian.data[antrian.tail].jumlahPesanan > stokMakananArr[noMenu])
@@ -242,6 +243,25 @@ void enqueue()
 				cout << "Apakah ingin menambahkan pesanan lagi? (y/n) : ";
 				cin >> pilihan;
 				system("cls");
+				if (pilihan == 'n')
+				{
+					cout << "Rincian pesanan anda" << endl;
+					if (tempNamaCustomer == antrian.data[antrian.tail - 1].namaCustomer)
+					{
+						for (int i = antrian.head; i < antrian.tail; i++)
+						{
+							if (antrian.data[i].namaCustomer == tempNamaCustomer)
+							{
+								cout << "Nama Customer  : " << antrian.data[i].namaCustomer << endl;
+								cout << "Nama Makanan   : " << antrian.data[i].namaMakanan << endl;
+								cout << "Jumlah Pesanan : " << antrian.data[i].jumlahPesanan << endl;
+								cout << "Total Harga    : " << antrian.data[i].totalHarga << endl;
+								cout << "-------------------------------------     " << endl;
+								cout << endl;
+							}
+						}
+					}
+				}
 			}
 		} while (pilihan == 'y');
 	}
