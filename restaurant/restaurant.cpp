@@ -147,67 +147,94 @@ void enqueue()
 	{
 		cout << "Masukkan nama customer : ";
 		cin >> antrian.data[antrian.tail].namaCustomer;
-		antrian.riwayat[antrian.tail].riwayatNamaCustomer = antrian.data[antrian.tail].namaCustomer;
+		antrian.riwayat[antrian.tail].riwayatNamaCustomer = antrian.data[antrian.tail].namaCustomer; // Copy nama customer ke riwayat
+		string tempNamaCustomer = antrian.data[antrian.tail].namaCustomer; // Simpan nama customer sementara
 
 		char pilihan;
 		do
 		{
-			tampilMenu();
-			cout << "Masukkan nomor menu : ";
-			cin >> noMenu;
-			noMenu--;
-			if (noMenu >= 0 && noMenu < 8)
+			bool stokHabis = false;
+			do
 			{
-				if (stokMakananArr[noMenu] == 0)
+				tampilMenu();
+				cout << "Masukkan nomor menu : ";
+				cin >> noMenu;
+				noMenu--;
+				if (noMenu >= 0 && noMenu < 8)
 				{
-					cout << "Stok habis" << endl;
-				}
-				else
-				{
-					cout << "Nama Makanan : " << namaMakananArr[noMenu] << endl;
-					cout << "Jumlah pesanan : ";
-					cin >> antrian.data[antrian.tail].jumlahPesanan;
-					antrian.riwayat[antrian.tail].riwayatJumlahPesanan = antrian.data[antrian.tail].jumlahPesanan; // Copy jumlah pesanan ke riwayat
-
-					if (antrian.data[antrian.tail].jumlahPesanan > stokMakananArr[noMenu])
+					if (stokMakananArr[noMenu] == 0)
 					{
-						cout << "Stok tidak mencukupi" << endl;
-						pilihan = 'y';
+						cout << "Stok habis" << endl;
+						cout << "Apakah ingin memilih menu lain? (y/n) : ";
+						cin >> pilihan;
+						if (pilihan == 'y')
+						{
+							stokHabis = false;
+						}
+						else
+						{
+							stokHabis = true;
+						}
 					}
 					else
 					{
-						antrian.data[antrian.tail].totalHarga = hargaMakananArr[noMenu] * antrian.data[antrian.tail].jumlahPesanan; // Hitung total harga
-						antrian.riwayat[antrian.tail].riwayatHarga = hargaMakananArr[noMenu]; // Copy harga makanan ke riwayat
-						cout << "Total harga : " << antrian.data[antrian.tail].totalHarga << endl; // Tampilkan total harga
-						cout << "Pesanan berhasil ditambahkan" << endl;
-
-						// Copy data ke struktur antrian
-						antrian.data[antrian.tail].namaMakanan = namaMakananArr[noMenu]; // Copy nama makanan
-						antrian.riwayat[antrian.tail].riwayatNamaMakanan = namaMakananArr[noMenu]; // Copy nama makanan ke riwayat
-						antrian.data[antrian.tail].harga = hargaMakananArr[noMenu]; // Copy harga makanan
-						antrian.riwayat[antrian.tail].riwayatHarga = hargaMakananArr[noMenu]; // Copy harga makanan ke riwayat
-						stokSisa = stokMakananArr[noMenu] - antrian.data[antrian.tail].jumlahPesanan; // Hitung sisa stok
-						antrian.data[antrian.tail].stok = stokSisa; // Copy sisa stok
-						stokMakananArr[noMenu] -= antrian.data[antrian.tail].jumlahPesanan; // Kurangi stok
-						antrian.riwayat[antrian.tail].riwayatTotalHarga = antrian.data[antrian.tail].totalHarga; // Copy total harga ke riwayat
-
-						antrian.tail++;
-						jmlRiwayat++;
-
-						cout << "Apakah ingin menambahkan pesanan lagi? (y/n) : ";
-						cin >> pilihan;
+						stokHabis = true;
 					}
 				}
+			} while (!stokHabis);
+
+			cout << "Nama Makanan : " << namaMakananArr[noMenu] << endl;
+			cout << "Jumlah pesanan : ";
+			cin >> antrian.data[antrian.tail].jumlahPesanan;
+			antrian.riwayat[antrian.tail].riwayatJumlahPesanan = antrian.data[antrian.tail].jumlahPesanan; // Copy jumlah pesanan ke riwayat
+
+			if (antrian.data[antrian.tail].jumlahPesanan > stokMakananArr[noMenu])
+			{
+				cout << "Stok tidak mencukupi, silahkan pesan dengan jumlah yang lebih kecil" << endl;
+				pilihan = 'y';
+			}
+			else
+			{
+				antrian.data[antrian.tail].totalHarga = hargaMakananArr[noMenu] * antrian.data[antrian.tail].jumlahPesanan; // Hitung total harga
+				antrian.riwayat[antrian.tail].riwayatHarga = hargaMakananArr[noMenu]; // Copy harga makanan ke riwayat
+				cout << "Total harga : " << antrian.data[antrian.tail].totalHarga << endl; // Tampilkan total harga
+				cout << "Pesanan berhasil ditambahkan" << endl;
+
+				// Copy data ke struktur antrian
+				antrian.data[antrian.tail].namaCustomer = tempNamaCustomer; // Copy nama customer
+				antrian.data[antrian.tail].namaMakanan = namaMakananArr[noMenu]; // Copy nama makanan
+				antrian.data[antrian.tail].harga = hargaMakananArr[noMenu]; // Copy harga makanan
+				stokSisa = stokMakananArr[noMenu] - antrian.data[antrian.tail].jumlahPesanan; // Hitung sisa stok
+				antrian.data[antrian.tail].stok = stokSisa; // Copy sisa stok
+				stokMakananArr[noMenu] -= antrian.data[antrian.tail].jumlahPesanan; // Kurangi stok
+
+				antrian.riwayat[jmlRiwayat].riwayatNamaCustomer = tempNamaCustomer;
+				antrian.riwayat[jmlRiwayat].riwayatNamaMakanan = namaMakananArr[noMenu];
+				antrian.riwayat[jmlRiwayat].riwayatJumlahPesanan = antrian.data[antrian.tail].jumlahPesanan;
+				antrian.riwayat[jmlRiwayat].riwayatHarga = hargaMakananArr[noMenu];
+				antrian.riwayat[jmlRiwayat].riwayatTotalHarga = antrian.data[antrian.tail].totalHarga;
+
+				// Copy data ke struktur antrian
+				//antrian.data[antrian.tail].namaMakanan = namaMakananArr[noMenu]; // Copy nama makanan
+				//antrian.riwayat[antrian.tail].riwayatNamaMakanan = namaMakananArr[noMenu]; // Copy nama makanan ke riwayat
+
+				//antrian.data[antrian.tail].harga = hargaMakananArr[noMenu]; // Copy harga makanan
+				//antrian.riwayat[antrian.tail].riwayatHarga = hargaMakananArr[noMenu]; // Copy harga makanan ke riwayat
+
+				//stokSisa = stokMakananArr[noMenu] - antrian.data[antrian.tail].jumlahPesanan; // Hitung sisa stok
+				//antrian.data[antrian.tail].stok = stokSisa; // Copy sisa stok
+
+				//stokMakananArr[noMenu] -= antrian.data[antrian.tail].jumlahPesanan; // Kurangi stok
+				//antrian.riwayat[antrian.tail].riwayatTotalHarga = antrian.data[antrian.tail].totalHarga; // Copy total harga ke riwayat
+
+				antrian.tail++;
+				jmlRiwayat++;
+
+				cout << "Apakah ingin menambahkan pesanan lagi? (y/n) : ";
+				cin >> pilihan;
 			}
 		} while (pilihan == 'y');
-
-		cout << "Terimakasih sudah memesan" << endl;
-		halamanKasir();
-	}
-	else
-	{
-		cout << "Antrian penuh, mohon menunggu beberapa saat!" << endl;
-	}
+	} 
 }
 
 void halamanKasir()
