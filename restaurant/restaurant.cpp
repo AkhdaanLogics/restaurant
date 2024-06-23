@@ -167,11 +167,7 @@ void enqueue()
 						cout << "Stok habis" << endl;
 						cout << "Apakah ingin memilih menu lain? (y/n) : ";
 						cin >> pilihan;
-						if (pilihan == 'y')
-						{
-							stokHabis = false;
-						}
-						else
+						if (pilihan == 'n')
 						{
 							stokHabis = true;
 						}
@@ -181,7 +177,7 @@ void enqueue()
 						stokHabis = true;
 					}
 				}
-			} while (!stokHabis);
+			} while (!stokHabis && pilihan == 'y');
 
 			cout << "Nama Makanan : " << namaMakananArr[noMenu] << endl;
 			cout << "Jumlah pesanan : ";
