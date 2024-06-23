@@ -86,7 +86,16 @@ void dequeue() // Queue
 		system("cls");
 		cout << "Pesanan teratas selesai" << endl;
 
+		// Tambahkan data ke riwayat
+		antrian.riwayat[jmlRiwayat].riwayatNamaCustomer = antrian.data[antrian.head].namaCustomer;
+		antrian.riwayat[jmlRiwayat].riwayatNamaMakanan = antrian.data[antrian.head].namaMakanan;
+		antrian.riwayat[jmlRiwayat].riwayatJumlahPesanan = antrian.data[antrian.head].jumlahPesanan;
+		antrian.riwayat[jmlRiwayat].riwayatHarga = antrian.data[antrian.head].harga;
+		antrian.riwayat[jmlRiwayat].riwayatTotalHarga = antrian.data[antrian.head].totalHarga;
+		
+		jmlRiwayat++;
 		antrian.head++;
+
 		if (antrian.head == antrian.tail)
 		{
 			antrian.head = antrian.tail = 0;
@@ -167,7 +176,6 @@ void enqueue()
 	{
 		cout << "\nMasukkan nama customer   : ";
 		cin >> antrian.data[antrian.tail].namaCustomer;
-		antrian.riwayat[antrian.tail].riwayatNamaCustomer = antrian.data[antrian.tail].namaCustomer; // Copy nama customer ke riwayat
 		string tempNamaCustomer = antrian.data[antrian.tail].namaCustomer; // Simpan nama customer sementara
 
 		char pilihan;
@@ -203,8 +211,6 @@ void enqueue()
 			cout << "Jumlah pesanan : ";
 			cin >> antrian.data[antrian.tail].jumlahPesanan;
 			cout << "---------------------------" << endl;
-			
-			antrian.riwayat[antrian.tail].riwayatJumlahPesanan = antrian.data[antrian.tail].jumlahPesanan; // Copy jumlah pesanan ke riwayat
 
 			if (antrian.data[antrian.tail].jumlahPesanan > stokMakananArr[noMenu])
 			{
@@ -217,7 +223,6 @@ void enqueue()
 			else
 			{
 				antrian.data[antrian.tail].totalHarga = hargaMakananArr[noMenu] * antrian.data[antrian.tail].jumlahPesanan; // Hitung total harga
-				antrian.riwayat[antrian.tail].riwayatHarga = hargaMakananArr[noMenu]; // Copy harga makanan ke riwayat
 				cout << "Total harga     : " << antrian.data[antrian.tail].totalHarga << endl; // Tampilkan total harga
 				cout << "Pesanan berhasil ditambahkan" << endl;
 
@@ -238,7 +243,6 @@ void enqueue()
 
 				// Tambahkan index antrian
 				antrian.tail++;
-				jmlRiwayat++;
 
 				cout << "Apakah ingin menambahkan pesanan lagi? (y/n) : ";
 				cin >> pilihan;
@@ -425,7 +429,6 @@ void halamanManager()
 			Sleep(1700);
 			system("cls");
 			masukAkun();
-
 		}
 		else
 		{
@@ -623,7 +626,6 @@ void masukAkun()
 			cout << "Username atau password salah!" << endl;
 			Sleep(1300);
 			system("cls");
-			// Tambahan kode untuk mengulang login
 		}
 	}
 	else if (pil == 2)
