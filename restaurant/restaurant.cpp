@@ -53,8 +53,19 @@ void enqueue();
 void dequeue();
 bool isEmpty();
 bool isFull();
+void loading();
 
-
+void loading() {
+	int loading = 5;
+	cout << "Loading";
+	for (int i = 0; i < loading; ++i)
+	{
+		cout << ".";
+		cout.flush();
+		Sleep(300);
+	}
+	system("cls");
+};
 bool isEmpty() // Queue
 {
 	if (antrian.tail == 0)
@@ -84,7 +95,9 @@ void dequeue() // Queue
 	if (!isEmpty())
 	{
 		system("cls");
-		cout << "Pesanan teratas selesai" << endl;
+		cout << " --------------------------" << endl;
+		cout << "| Pesanan teratas selesai! |" << endl;
+		cout << " --------------------------" << endl;
 
 		// Tambahkan data ke riwayat
 		antrian.riwayat[jmlRiwayat].riwayatNamaCustomer = antrian.data[antrian.head].namaCustomer;
@@ -92,7 +105,7 @@ void dequeue() // Queue
 		antrian.riwayat[jmlRiwayat].riwayatJumlahPesanan = antrian.data[antrian.head].jumlahPesanan;
 		antrian.riwayat[jmlRiwayat].riwayatHarga = antrian.data[antrian.head].harga;
 		antrian.riwayat[jmlRiwayat].riwayatTotalHarga = antrian.data[antrian.head].totalHarga;
-		
+
 		jmlRiwayat++;
 		antrian.head++;
 
@@ -106,7 +119,9 @@ void dequeue() // Queue
 	else
 	{
 		system("cls");
-		cout << "Antrian kosong!" << endl;
+		cout << " -----------------" << endl;
+		cout << "| Antrian kosong! |" << endl;
+		cout << " -----------------" << endl;
 		Sleep(1700);
 		system("cls");
 	}
@@ -117,6 +132,8 @@ void tampilAntrian()
 	if (!isEmpty())
 	{
 		system("cls");
+		cout << "Memuat data antrian pesanan" << endl;
+		loading();
 		cout << "=== Antrian Pesanan ===\n" << endl;
 		for (int i = antrian.head; i < antrian.tail; i++)
 		{
@@ -176,6 +193,7 @@ void enqueue()
 	{
 		cout << "\nMasukkan nama customer   : ";
 		cin >> antrian.data[antrian.tail].namaCustomer;
+		antrian.riwayat[antrian.tail].riwayatNamaCustomer = antrian.data[antrian.tail].namaCustomer; // Copy nama customer ke riwayat
 		string tempNamaCustomer = antrian.data[antrian.tail].namaCustomer; // Simpan nama customer sementara
 
 		char pilihan;
@@ -184,6 +202,8 @@ void enqueue()
 			bool stokHabis = false;
 			do
 			{
+				cout << "\nMemuat menu yang tersedia" << endl;
+				loading();
 				tampilMenu();
 				cout << "Masukkan nomor menu : ";
 				cin >> noMenu;
@@ -192,7 +212,9 @@ void enqueue()
 				{
 					if (stokMakananArr[noMenu] == 0)
 					{
-						cout << "Stok habis" << endl;
+						cout << " -------------" << endl;
+						cout << "| Stok habis |" << endl;
+						cout << " -------------" << endl;
 						cout << "Apakah ingin memilih menu lain? (y/n) : ";
 						cin >> pilihan;
 						if (pilihan == 'n')
@@ -205,12 +227,20 @@ void enqueue()
 						stokHabis = true;
 					}
 				}
+				else {
+					system("cls");
+					cout << "salah pilih nomor menu!" << endl;
+					Sleep(1700);
+					system("cls");
+				}
 			} while (!stokHabis);
 			cout << "---------------------------" << endl;
 			cout << "Nama Makanan   : " << namaMakananArr[noMenu] << endl;
 			cout << "Jumlah pesanan : ";
 			cin >> antrian.data[antrian.tail].jumlahPesanan;
 			cout << "---------------------------" << endl;
+
+			antrian.riwayat[antrian.tail].riwayatJumlahPesanan = antrian.data[antrian.tail].jumlahPesanan; // Copy jumlah pesanan ke riwayat
 
 			if (antrian.data[antrian.tail].jumlahPesanan > stokMakananArr[noMenu])
 			{
@@ -223,7 +253,8 @@ void enqueue()
 			else
 			{
 				antrian.data[antrian.tail].totalHarga = hargaMakananArr[noMenu] * antrian.data[antrian.tail].jumlahPesanan; // Hitung total harga
-				cout << "Total harga     : " << antrian.data[antrian.tail].totalHarga << endl; // Tampilkan total harga
+				antrian.riwayat[antrian.tail].riwayatHarga = hargaMakananArr[noMenu]; // Copy harga makanan ke riwayat
+				cout << "Total harga    : " << antrian.data[antrian.tail].totalHarga << endl; // Tampilkan total harga
 				cout << "Pesanan berhasil ditambahkan" << endl;
 
 				// Copy data ke struktur antrian
@@ -247,18 +278,22 @@ void enqueue()
 				cout << "Apakah ingin menambahkan pesanan lagi? (y/n) : ";
 				cin >> pilihan;
 				system("cls");
+				cout << "Selesai memesan, Mencetak rincian pesanan" << endl;
+				loading();
 				if (pilihan == 'n')
 				{
-					cout << "Rincian pesanan anda" << endl;
+					cout << "Rincian pesanan anda : " << endl;
 					if (tempNamaCustomer == antrian.data[antrian.tail - 1].namaCustomer)
 					{
 						for (int i = antrian.head; i < antrian.tail; i++)
 						{
 							if (antrian.data[i].namaCustomer == tempNamaCustomer)
 							{
+								cout << "-------------------------------------     " << endl;
 								cout << "Nama Customer  : " << antrian.data[i].namaCustomer << endl;
 								cout << "Nama Makanan   : " << antrian.data[i].namaMakanan << endl;
 								cout << "Jumlah Pesanan : " << antrian.data[i].jumlahPesanan << endl;
+								cout << "-------------------------------------     " << endl;
 								cout << "Total Harga    : " << antrian.data[i].totalHarga << endl;
 								cout << "-------------------------------------     " << endl;
 								cout << endl;
@@ -299,7 +334,8 @@ void halamanKasir()
 		else if (pil == 4)
 		{
 			system("cls");
-			cout << "Anda keluar" << endl;
+			cout << "Kembali ke halaman login" << endl;
+			loading();
 			masukAkun();
 		}
 		else
@@ -314,7 +350,6 @@ void halamanKasir()
 
 void tambahStok()
 {
-menu:
 	tampilMenu();
 	cout << "=== Ubah Stok ===" << endl;
 	cout << "Masukkan nomor menu : ";
@@ -329,7 +364,11 @@ menu:
 		int* stokBaru = &stokMakananArr[noMenu];
 		cin >> *stokBaru;
 		system("cls");
-		cout << "Stok berhasil diubah!" << endl;
+		cout << "Sedang menambahkan stok" << endl;
+		loading();
+		cout << " ------------------------------" << endl;
+		cout << "| Stok berhasil ditambahkan!  |" << endl;
+		cout << " ------------------------------" << endl;
 		Sleep(1700);
 		system("cls");
 	}
@@ -339,7 +378,6 @@ menu:
 		cout << "Menu tidak tersedia" << endl;
 		Sleep(1700);
 		system("cls");
-		goto menu;
 	}
 }
 
@@ -348,13 +386,15 @@ void riwayatPesanCustomer()
 	if (jmlRiwayat == 0)
 	{
 		system("cls");
-		cout << "Riwayat kosong" << endl;
+		cout << "Riwayat kosong!" << endl;
 		Sleep(1700);
 		system("cls");
 	}
 	else
 	{
 		system("cls");
+		cout << "Memuat riwayat pesanan" << endl;
+		loading();
 		cout << "=== Riwayat Pesanan ===" << endl;
 		for (int i = 0; i < jmlRiwayat; i++)
 		{
@@ -388,16 +428,23 @@ void halamanManager()
 		cin >> pil;
 		if (pil == 1)
 		{
+			system("cls");
+			cout << "Sedang menampilkan menu" << endl;
+			loading();
 			tampilMenu();
 		}
 		else if (pil == 2)
 		{
 			system("cls");
+			cout << "Memuat stok yang tersedia" << endl;
+			loading();
 			tambahStok();
 		}
 		else if (pil == 3)
 		{
 			system("cls");
+			cout << "Memuat stok yang tersedia" << endl;
+			loading();
 			cout << "=== Stok yang tersedia ===\n" << endl;
 			for (int i = 0; i < 8; i++)
 			{
@@ -412,23 +459,26 @@ void halamanManager()
 		}
 		else if (pil == 4)
 		{
+			system("cls");
 			riwayatPesanCustomer();
 		}
 		else if (pil == 5)
 		{
+			system("cls");
 			searchNama();
 		}
 		else if (pil == 6)
 		{
+			system("cls");
 			sortPengeluaranCustomer();
 		}
 		else if (pil == 7)
 		{
 			system("cls");
 			cout << "Kembali ke halaman login" << endl;
-			Sleep(1700);
-			system("cls");
+			loading();
 			masukAkun();
+
 		}
 		else
 		{
@@ -515,7 +565,10 @@ void sortPengeluaranCustomer()
 	}
 	else
 	{
+		system("cls");
 		cout << "Pilihan tidak tersedia" << endl;
+		Sleep(1700);
+		system("cls");
 	}
 }
 
@@ -528,7 +581,7 @@ void searchNama()
 	if (jmlRiwayat == 0)
 	{
 		system("cls");
-		cout << "Riwayat kosong" << endl;
+		cout << "Riwayat kosong!" << endl;
 		Sleep(1700);
 		system("cls");
 	}
@@ -536,6 +589,9 @@ void searchNama()
 	{
 		cout << "Masukkan nama customer yang dicari : ";
 		cin >> cariNama;
+		system("cls");
+		cout << "Mencari customer dengan nama " << cariNama << endl;
+		loading();
 		for (int i = 0; i < jmlRiwayat; i++)
 		{
 			if (antrian.riwayat[i].riwayatNamaCustomer == cariNama)
@@ -557,8 +613,8 @@ void searchNama()
 		else
 		{
 			system("cls");
-			cout << "Sistem menemukan customer dengan nama " << cariNama << endl;
-			cout << "Berikut data pesanan yang telah dilakukan oleh \n" << cariNama << endl;
+			cout << "Sistem menemukan customer dengan nama " << cariNama << endl << endl;
+			cout << "Berikut data pesanan yang telah dilakukan oleh " << cariNama << " : " << endl;
 			for (int i = 0; i < x; i++)
 			{
 				cout << "Nama Customer  : " << antrian.riwayat[posisi[i]].riwayatNamaCustomer << endl;
@@ -597,15 +653,7 @@ void masukAkun()
 		if (managerName == "admin" && managerPass == "admin")
 		{
 			system("cls");
-			int loading = 5;
-			cout << "Loading";
-			for (int i = 0; i < loading; ++i)
-			{
-				cout << ".";
-				cout.flush();
-				Sleep(200);
-			}
-			system("cls");
+			loading();
 			cout << "Anda login sebagai manager\n" << endl;
 			// Tambahkan animasi loading dengan cout Loading...
 			// Tambahkan kode untuk menu manager
@@ -614,32 +662,17 @@ void masukAkun()
 		else
 		{
 			system("cls");
-			int loading = 5;
-			cout << "Loading";
-			for (int i = 0; i < loading; ++i)
-			{
-				cout << ".";
-				cout.flush();
-				Sleep(200);
-			}
-			system("cls");
+			loading();
 			cout << "Username atau password salah!" << endl;
 			Sleep(1300);
 			system("cls");
+			// Tambahan kode untuk mengulang login
 		}
 	}
 	else if (pil == 2)
 	{
 		system("cls");
-		int loading = 5;
-		cout << "Loading";
-		for (int i = 0; i < loading; ++i)
-		{
-			cout << ".";
-			cout.flush();
-			Sleep(300);
-		}
-		system("cls");
+		loading();
 		cout << "Anda login sebagai kasir\n" << endl;
 		halamanKasir();
 		// Tambahkan animasi loading dengan cout Loading...
@@ -660,12 +693,12 @@ void masukAkun()
 	}
 }
 
+
 int main()
 {
 	while (true)
 	{
-		cout << "                             " << endl;
-		cout << "  SELAMAT DATANG DI SISTEM   " << endl;
+		cout << "** SELAMAT DATANG DI SISTEM **" << endl;
 		masukAkun();
 	}
 }
